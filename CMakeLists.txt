@@ -30,12 +30,14 @@ set(DEPS_FOLDER ${PROJECT_SOURCE_DIR}/deps)
 set(GTEST_INCLUDES ${DEPS_FOLDER}/gtest/include)
 set(GTEST_LIBS ${DEPS_FOLDER}/gtest/lib)
 set(CPP_REDIS_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
+add_definitions(-DASIO_STANDALONE) # noboost
 
 
 ###
 # includes
 ###
 include_directories(${CPP_REDIS_INCLUDES})
+include_directories(${PROJECT_SOURCE_DIR}/deps/asio/include/)
 
 
 ###
@@ -60,7 +62,6 @@ endforeach()
 # executable
 ###
 add_library(${PROJECT} SHARED ${SOURCES})
-target_link_libraries(${PROJECT} boost_system)
 set_target_properties(${PROJECT}
                       PROPERTIES
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/target")

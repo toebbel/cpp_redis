@@ -25,7 +25,7 @@ io_service::post(const std::function<void()>& fct) {
     m_io_service.post(fct);
 }
 
-boost::asio::io_service&
+asio::io_service&
 io_service::get(void) {
     return m_io_service;
 }

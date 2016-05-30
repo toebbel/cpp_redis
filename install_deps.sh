@@ -20,3 +20,8 @@ cd ../../
 mkdir -p gtest/lib
 mv gtest-1.7.0/include gtest/
 mv gtest-1.7.0/build/*.a gtest/lib
+
+# Install Asio WIHTOUT boost
+wget https://github.com/chriskohlhoff/asio/archive/master.zip
+unzip master.zip
+mv asio-master/asio .

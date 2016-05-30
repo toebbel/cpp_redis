@@ -26,11 +26,11 @@ tcp_client::connect(const std::string& host, unsigned int port) {
     std::condition_variable conn_cond_var;
 
     //! resolve host name
-    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(host), port);
+    asio::ip::tcp::endpoint endpoint(asio::ip::address::from_string(host), port);
 
     //! async connect
     std::atomic_bool is_notified(false);
-    m_socket.async_connect(endpoint, [&](boost::system::error_code error) {
+    m_socket.async_connect(endpoint, [&](std::error_code error) {
         if (not error) {
             m_is_connected = true;
             async_read();
@@ -77,12 +77,12 @@ tcp_client::disconnect(void) {
 
 void
 tcp_client::async_read(void) {
-    boost::asio::async_read(m_socket, boost::asio::buffer(m_read_buffer.data(), READ_SIZE),
-        [](const boost::system::error_code& error, std::size_t bytes) -> std::size_t {
+    asio::async_read(m_socket, asio::buffer(m_read_buffer.data(), READ_SIZE),
+        [](const std::error_code& error, std::size_t bytes) -> std::size_t {
             //! break if bytes have been received, continue otherwise
             return error or bytes ? 0 : READ_SIZE;
         },
-        [=](boost::system::error_code error, std::size_t length) {
+        [=](std::error_code error, std::size_t length) {
             if (error) {
                 process_disconnection();
                 return ;
@@ -130,8 +130,8 @@ tcp_client::send(const std::vector<char>& buffer) {
 
 void
 tcp_client::async_write(void) {
-    boost::asio::async_write(m_socket, boost::asio::buffer(m_write_buffer.data(), m_write_buffer.size()),
-        [this](boost::system::error_code error, std::size_t length) {
+    asio::async_write(m_socket, asio::buffer(m_write_buffer.data(), m_write_buffer.size()),
+        [this](std::error_code error, std::size_t length) {
             if (error) {
                 process_disconnection();
                 return ;

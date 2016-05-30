@@ -1,13 +1,13 @@
 #pragma once
 
 #include <thread>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
 namespace cpp_redis {
 
 namespace network {
 
-//! boost io service wrapper
+//! asio io service wrapper
 class io_service {
 public:
     //! ctor & dtor
@@ -24,11 +24,11 @@ public:
     void post(const std::function<void()>& fct);
 
     //! getters
-    boost::asio::io_service& get(void);
+    asio::io_service& get(void);
 
 private:
-    boost::asio::io_service m_io_service;
-    boost::asio::io_service::work m_work;
+    asio::io_service m_io_service;
+    asio::io_service::work m_work;
     std::thread m_io_service_thread;
 };
 

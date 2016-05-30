@@ -4,19 +4,19 @@
 #include <thread>
 #include <atomic>
 #include <stdexcept>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
 #include "cpp_redis/network/io_service.hpp"
 #include "cpp_redis/redis_error.hpp"
 
-using boost::asio::ip::tcp;
+using asio::ip::tcp;
 
 namespace cpp_redis {
 
 namespace network {
 
 //! tcp_client
-//! async tcp client based on boost asio
+//! async tcp client based on asio (non-boost)
 class tcp_client {
 public:
     //! ctor & dtor
@@ -50,7 +50,7 @@ public:
     void set_disconnection_handler(const disconnection_handler& handler);
 
 private:
-    //! make boost asio async read and write operations
+    //! make asio async read and write operations
     void async_read(void);
     void async_write(void);
 
