@@ -13,7 +13,7 @@ namespace cpp_redis {
 class redis_subscriber {
 public:
     //! ctor & dtor
-    redis_subscriber(void);
+    redis_subscriber(asio::io_service& io_service);
     ~redis_subscriber(void) = default;
 
     //! copy ctor & assignment operator

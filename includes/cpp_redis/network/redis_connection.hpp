@@ -15,7 +15,7 @@ namespace network {
 class redis_connection {
 public:
     //! ctor & dtor
-    redis_connection(void);
+    redis_connection(asio::io_service& io_service);
     ~redis_connection(void);
 
     //! copy ctor & assignment operator

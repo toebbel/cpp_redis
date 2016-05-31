@@ -6,10 +6,9 @@ namespace cpp_redis {
 
 namespace network {
 
-io_service tcp_client::m_io_service;
-
-tcp_client::tcp_client(void)
-: m_socket(m_io_service.get())
+tcp_client::tcp_client(asio::io_service& io_service)
+: m_io_service(io_service)
+, m_socket(io_service)
 , m_is_connected(false)
 , m_read_buffer(READ_SIZE) {}
 
@@ -37,19 +36,9 @@ tcp_client::connect(const std::string& host, unsigned int port) {
         }
 
         is_notified = true;
-        conn_cond_var.notify_one();
+        if (m_disconnection_handler)
+            m_disconnection_handler(*this);
     });
-
-    //! start loop and wait for async connect result
-    std::mutex conn_mutex;
-    std::unique_lock<std::mutex> lock(conn_mutex);
-    m_io_service.run();
-
-    if (not is_notified)
-      conn_cond_var.wait(lock);
-
-    if (not m_is_connected)
-        throw redis_error("Fail to connect to " + host + ":" + std::to_string(port));
 }
 
 void
@@ -58,21 +47,9 @@ tcp_client::disconnect(void) {
       return ;
 
     m_is_connected = false;
-
-    std::mutex close_socket_mutex;
-    std::condition_variable close_socket_cond_var;
-    std::unique_lock<std::mutex> lock(close_socket_mutex);
-
-    std::atomic_bool is_notified(false);
-    m_io_service.post([this, &close_socket_cond_var, &is_notified]() {
+    m_io_service.post([this]() {
         m_socket.close();
-
-        is_notified = true;
-        close_socket_cond_var.notify_one();
     });
-
-    if (not is_notified)
-      close_socket_cond_var.wait(lock);
 }
 
 void

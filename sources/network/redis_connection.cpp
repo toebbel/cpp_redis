@@ -4,8 +4,9 @@ namespace cpp_redis {
 
 namespace network {
 
-redis_connection::redis_connection(void)
-: m_reply_callback(nullptr)
+redis_connection::redis_connection(asio::io_service& io_service)
+: m_client(io_service)
+, m_reply_callback(nullptr)
 , m_disconnection_handler(nullptr)
 {
     auto disconnection_handler = std::bind(&redis_connection::tcp_client_disconnection_handler, this, std::placeholders::_1);

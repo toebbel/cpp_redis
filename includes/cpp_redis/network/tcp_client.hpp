@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <asio.hpp>
 
-#include "cpp_redis/network/io_service.hpp"
 #include "cpp_redis/redis_error.hpp"
 
 using asio::ip::tcp;
@@ -20,7 +19,7 @@ namespace network {
 class tcp_client {
 public:
     //! ctor & dtor
-    tcp_client(void);
+    tcp_client(asio::io_service& io_service);
     ~tcp_client(void);
 
     //! assignment operator & copy ctor
@@ -31,6 +30,7 @@ public:
     bool is_connected(void);
 
     //! handle connection & disconnection
+    typedef std::function<void(tcp_client&)> connection_handler;
     void connect(const std::string& host, unsigned int port);
     void disconnect(void);
 
@@ -59,8 +59,8 @@ private:
     void process_disconnection(void);
 
 private:
-    //! io service
-    static io_service m_io_service;
+    //! referenced IO service
+    asio::io_service& m_io_service;
     tcp::socket m_socket;
 
     //! is connected

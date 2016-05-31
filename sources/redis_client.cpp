@@ -3,7 +3,7 @@
 
 namespace cpp_redis {
 
-redis_client::redis_client(void) {
+redis_client::redis_client(asio::io_service& io_service) : m_client(io_service) {
     auto disconnection_handler = std::bind(&redis_client::connection_disconnection_handler, this, std::placeholders::_1);
     m_client.set_disconnection_handler(disconnection_handler);
 

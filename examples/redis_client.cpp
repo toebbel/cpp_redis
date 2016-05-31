@@ -4,7 +4,8 @@
 #include <iostream>
 
 volatile std::atomic_bool should_exit(false);
-cpp_redis::redis_client client;
+asio::io_service io_service;
+cpp_redis::redis_client client(io_service);
 
 void
 sigint_handler(int) {

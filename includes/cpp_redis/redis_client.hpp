@@ -13,7 +13,7 @@ namespace cpp_redis {
 class redis_client {
 public:
     //! ctor & dtor
-    redis_client(void);
+    redis_client(asio::io_service& io_service);
     ~redis_client(void);
 
     //! copy ctor & assignment operator
